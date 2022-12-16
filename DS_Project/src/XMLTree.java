@@ -1,4 +1,4 @@
-package Data.Structure.and.Algorithms.Project;
+
 
 import java.io.*;
 import java.util.ArrayList;
@@ -46,6 +46,16 @@ public class XMLTree {
 
         prettify(root, 0);
 
+    }
+    public static void preOrderPrint(XMLTreeNode node) {
+        if (node.children.isEmpty()) {
+            System.out.println("Node Value: " + node.getValue() + " " +node.parent);
+            return;
+        }
+        System.out.println("Node Name: " + node.getValue());
+        for (int i = 0; i < node.children.size(); i++) {
+            preOrderPrint(node.children.get(i));
+        }
     }
 
     private void prettify(XMLTreeNode node, int indentation){
