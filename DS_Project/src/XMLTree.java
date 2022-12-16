@@ -10,6 +10,7 @@ public class XMLTree {
     private BufferedReader br;
     static ArrayList<Integer> errorLines = new ArrayList<>();
     static ArrayList<String> errorMessages = new ArrayList<>();
+    private String objectXMLPretify ="";
 
     public static XMLTreeNode getRoot()
     {
@@ -39,6 +40,37 @@ public class XMLTree {
         br = new BufferedReader(XMLStringReader);
         constructTree();
 
+    }
+
+    public void XMLPrettify(){
+
+        prettify(root, 0);
+
+    }
+
+    private void prettify(XMLTreeNode node, int indentation){
+
+
+        if (node.getChildren().size()==0) {
+
+            objectXMLPretify += (node.getValue().indent(indentation));
+            return;
+
+        }
+
+        objectXMLPretify += (("<" + node.getValue() + ">").indent(indentation));
+
+        for (int i = 0; i < node.getChildren().size(); i++) {
+
+            prettify(node.getChildren().get(i), indentation + 4);
+
+        }
+
+        objectXMLPretify += (("</" + node.getValue() + ">").indent(indentation));
+    }
+
+    public String getObjectXMLPretify() {
+        return objectXMLPretify;
     }
 
     public void constructTree() throws IOException {
