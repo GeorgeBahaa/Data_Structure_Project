@@ -10,6 +10,8 @@ public class XMLTree {
     private BufferedReader br;
     static ArrayList<Integer> errorLines = new ArrayList<>();
     static ArrayList<String> errorMessages = new ArrayList<>();
+	private String objectJson ="";
+
 	static String objectXMLPretify ="";
 
 
@@ -278,4 +280,72 @@ public class XMLTree {
 		objectXMLPretify += (("</" + node.getValue() + ">").indent(indentation));
 	}
 
+	public  void printJson (XMLTreeNode node) {
+		if (node == root){
+			objectJson += "{";
+		}
+		if (!node.getChildren().isEmpty()) {
+//            int indentation = XMLTreeNode.depth(root, node.getValue());
+			objectJson += "\n\"" + node.getValue() + "\"" + ":";
+			if (node.getChildren().size() > 1) {
+				if (node.getChildren().get(0).getValue().charAt(0) == node.getChildren().get(1).getValue().charAt(0)) {
+					objectJson += "{";
+					objectJson += "\n\"" + node.getChildren().get(0).getValue() + "\"" + ":";
+					objectJson += "[";
+					for (int i = 0; i < node.getChildren().size(); i++) {
+						if ((node.getChildren().get(i).getChildren().size()>1) ){
+							objectJson += "\n{";
+						}
+						for (int j = 0; j < node.getChildren().get(i).getChildren().size(); j++){
+							if ( node.getChildren().get(0).getChildren().get(0).getValue().charAt(0) == node.getChildren()
+									.get(1).getChildren().get(0).getValue().charAt(0) && node.getChildren().get(i).getChildren().size()==1){
+								objectJson += "\n{";
+							}
+							printJson(node.getChildren().get(i).getChildren().get(j));
+							if ( node.getChildren().get(0).getChildren().get(0).getValue().charAt(0) == node.getChildren().get(1).
+									getChildren().get(0).getValue().charAt(0) && node.getChildren().get(i).getChildren().size()==1 ){
+								objectJson += "\n}";
+							}
+							if (j != node.getChildren().get(i).getChildren().size() - 1) {
+								objectJson += ",";
+							}
+						}
+						if ((node.getChildren().get(i).getChildren().size()>1)){
+							objectJson += "\n}";
+						}
+						if (i != node.getChildren().size() - 1) {
+							objectJson += ",";
+						}
+					}
+					objectJson += "]";
+					objectJson += "\n}";
+				} else {
+					objectJson += "{";
+					for (int i = 0; i < node.getChildren().size(); i++) {
+						printJson(node.getChildren().get(i));
+						if (i != node.getChildren().size() - 1) {
+							objectJson += ",";
+						}
+					}
+					objectJson += "\n}";
+				}
+			}
+			else {
+				if (!node.getChildren().get(0).getChildren().isEmpty()){
+					objectJson += "{";
+				}
+				printJson(node.getChildren().get(0));
+				if (!node.getChildren().get(0).getChildren().isEmpty()){
+					objectJson += "\n}";
+				}
+			}
+		}
+		else {
+			objectJson += "\"" + node.getValue() + "\"";
+			return;
+		}
+		if (node == root){
+			objectJson += "\n}";
+		}
+	}
 }
