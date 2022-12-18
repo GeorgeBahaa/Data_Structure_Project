@@ -44,4 +44,10 @@ public class XMLTreeNode {
         return this.children.remove(children.size()-1);
     }
 
+    public boolean hasChildren(){
+        return !(this.children.isEmpty());
+    }
+    public boolean MatchingTag(int i){
+        return (this.children.get(0).children.get(0).value.contains(this.children.get(1).children.get(0).value)&& this.children.get(i).children.size()==1);
+    }
 }

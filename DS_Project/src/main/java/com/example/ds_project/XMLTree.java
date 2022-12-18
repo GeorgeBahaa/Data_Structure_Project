@@ -10,10 +10,11 @@ public class XMLTree {
     private BufferedReader br;
     static ArrayList<Integer> errorLines = new ArrayList<>();
     static ArrayList<String> errorMessages = new ArrayList<>();
-	private String objectJson ="";
+	private static String objectJson ="";
 
 	static String objectXMLPretify ="";
 
+     static String ObjectJson;
 
     public XMLTree(File XMLFileReader) throws IOException {
     	
@@ -141,8 +142,41 @@ public class XMLTree {
 		}
 		
     }
-    
-    public void constructTree() throws IOException {
+	public static int depth(XMLTreeNode node, String value) {
+		if (node.getValue() == value) {
+			return 0;
+		}
+		for (int i = 0; i < node.getChildren().size(); i++){
+			int dis = depth(node.getChildren().get(i),value);
+			if (dis != -1) {
+				return 1 + dis;
+			}
+		}
+		return -1;
+	}
+
+
+	public static void indentationJson(XMLTreeNode node){
+		int indentation = XMLTree.depth(root, node.getValue());
+		objectJson += "\n";
+		for(int k=0 ; k <indentation*3 ; k++) {
+			objectJson += " ";
+		}
+	}
+
+	public static void preOrderPrint(XMLTreeNode node) {
+		if (node.getChildren().isEmpty()) {
+			System.out.println("Node Value: " + node.getValue());
+			return;
+		}
+		System.out.println("Node Name: " + node.getValue());
+		for (int i = 0; i < node.getChildren().size(); i++) {
+			preOrderPrint(node.getChildren().get(i));
+
+		}
+	}
+
+	public void constructTree() throws IOException {
 
 		Stack<XMLTreeNode> stack = new Stack();
 		int lineNumber = 0;
@@ -284,66 +318,75 @@ public class XMLTree {
 		objectXMLPretify += (("</" + node.getValue() + ">").indent(indentation));
 	}
 
-	public  void printJson (XMLTreeNode node) {
+	public static void printJson (XMLTreeNode node) {
 		if (node == root){
 			objectJson += "{";
 		}
-		if (!node.getChildren().isEmpty()) {
-//            int indentation = XMLTreeNode.depth(root, node.getValue());
-			objectJson += "\n\"" + node.getValue() + "\"" + ":";
+		if (node.hasChildren()) {
+			indentationJson(node);
+			objectJson += "\""+ node.getValue() + "\"" + ":";
 			if (node.getChildren().size() > 1) {
-				if (node.getChildren().get(0).getValue().charAt(0) == node.getChildren().get(1).getValue().charAt(0)) {
+				if (node.getChildren().get(0).getValue().contains(node.getChildren().get(1).getValue())) {
 					objectJson += "{";
-					objectJson += "\n\"" + node.getChildren().get(0).getValue() + "\"" + ":";
+					indentationJson(node);
+					objectJson += "  \""+ node.getChildren().get(0).getValue() + "\"" + ":";
 					objectJson += "[";
 					for (int i = 0; i < node.getChildren().size(); i++) {
 						if ((node.getChildren().get(i).getChildren().size()>1) ){
-							objectJson += "\n{";
+
+							objectJson += "{";
 						}
 						for (int j = 0; j < node.getChildren().get(i).getChildren().size(); j++){
-							if ( node.getChildren().get(0).getChildren().get(0).getValue().charAt(0) == node.getChildren()
-									.get(1).getChildren().get(0).getValue().charAt(0) && node.getChildren().get(i).getChildren().size()==1){
-								objectJson += "\n{";
+							if (node.MatchingTag(i)){
+								objectJson += "{";
 							}
 							printJson(node.getChildren().get(i).getChildren().get(j));
-							if ( node.getChildren().get(0).getChildren().get(0).getValue().charAt(0) == node.getChildren().get(1).
-									getChildren().get(0).getValue().charAt(0) && node.getChildren().get(i).getChildren().size()==1 ){
-								objectJson += "\n}";
+							if (node.MatchingTag(i) ){
+								indentationJson(node.getChildren().get(0).getChildren().get(0));
+								objectJson += "}";
 							}
 							if (j != node.getChildren().get(i).getChildren().size() - 1) {
 								objectJson += ",";
 							}
 						}
 						if ((node.getChildren().get(i).getChildren().size()>1)){
-							objectJson += "\n}";
+							indentationJson( node.getChildren().get(0).getChildren().get(0));
+							objectJson += "}";
 						}
 						if (i != node.getChildren().size() - 1) {
 							objectJson += ",";
 						}
 					}
+					indentationJson(node.getChildren().get(0));
 					objectJson += "]";
-					objectJson += "\n}";
+					indentationJson(node);
+					objectJson += "}";
 				} else {
 					objectJson += "{";
+
 					for (int i = 0; i < node.getChildren().size(); i++) {
 						printJson(node.getChildren().get(i));
+
 						if (i != node.getChildren().size() - 1) {
-							objectJson += ",";
+							objectJson += ",\n";
 						}
 					}
-					objectJson += "\n}";
+					indentationJson(node);
+					objectJson += "}";
 				}
 			}
 			else {
-				if (!node.getChildren().get(0).getChildren().isEmpty()){
+				if (node.getChildren().get(0).hasChildren()){
 					objectJson += "{";
 				}
 				printJson(node.getChildren().get(0));
-				if (!node.getChildren().get(0).getChildren().isEmpty()){
-					objectJson += "\n}";
+				if (node.getChildren().get(0).hasChildren()){
+					indentationJson(node.getChildren().get(0));
+					objectJson += "}";
 				}
 			}
 		}
+
 		else {
 			objectJson += "\"" + node.getValue() + "\"";
 			return;
@@ -351,5 +394,9 @@ public class XMLTree {
 		if (node == root){
 			objectJson += "\n}";
 		}
+
+	}
+	public  String getObjectJson() {
+		return objectJson;
 	}
 }
