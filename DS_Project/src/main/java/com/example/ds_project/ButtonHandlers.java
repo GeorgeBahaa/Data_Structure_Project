@@ -259,7 +259,6 @@ public class ButtonHandlers {
                 stage.setScene(scene);
                 stage.show();
             }
-
         }
 
             static class DecompressHandler extends XmlEditor implements EventHandler {
@@ -348,15 +347,4 @@ public class ButtonHandlers {
                     error = null;
                 }
             }
-
-            static class SaveXmlHandler extends XmlEditor implements EventHandler {
-                @Override
-                public void handle(Event event) {
-                    System.out.println(xmlTextField.getText());
-                }
-            }
-
-
-
-
 }

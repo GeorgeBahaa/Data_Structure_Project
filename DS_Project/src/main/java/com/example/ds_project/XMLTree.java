@@ -357,7 +357,7 @@ public class XMLTree {
 							objectJson += ",";
 						}
 					}
-					indentationJson(node.getChildren().get(0));
+					//indentationJson(node.getChildren().get(0));
 					objectJson += "]";
 					indentationJson(node);
 					objectJson += "}";

@@ -5,6 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -17,6 +18,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
 
 public class XmlEditor extends Application {
     File file1;
@@ -31,21 +33,24 @@ public class XmlEditor extends Application {
     private Label xmlLabel;
     private Label selectLabel;
     private Label xmlTypeLabel;
-    TextField xmlTextField = new TextField();
+    TextArea xmlTextArea = new TextArea();
     private FlowPane flowPane;
+    private FlowPane SaveXMLflowPane;
+
     private HBox hBoxButtons;
     private HBox hBox;
     private VBox vBox;
+    String xmlText = " ";
 
     @Override
     public void start(Stage stage) throws IOException {
-        xmlLabel = new Label("XMLEditor");
-        xmlLabel.setTextFill(Color.CRIMSON);
+        xmlLabel = new Label("XML Editor");
+        xmlLabel.setTextFill(Color.DARKBLUE);
         xmlLabel.setFont(Font.font("Arial" , FontWeight.BOLD , FontPosture.ITALIC, 28));
         xmlTypeLabel= new Label(" Type XML Text");
-        xmlTypeLabel.setFont(Font.font("Arial" , FontWeight.NORMAL , FontPosture.ITALIC, 18));
-        selectLabel = new Label("SelectFile");
-        selectLabel.setFont(Font.font("Arial" , FontWeight.NORMAL , FontPosture.ITALIC, 18));
+        xmlTypeLabel.setFont(Font.font("Arial" , FontWeight.NORMAL , FontPosture.ITALIC, 20));
+        selectLabel = new Label(" SelectFile");
+        selectLabel.setFont(Font.font("Arial" , FontWeight.NORMAL , FontPosture.ITALIC,20));
 
         selectButton = new Button("Browse");
         validateButton = new Button("validate");
@@ -54,7 +59,7 @@ public class XmlEditor extends Application {
         decompressButton = new Button(" decompress");
         prettifyButton = new Button("prettify");
         saveXml = new Button("saveXml");
-        selectButton.setPrefHeight(30);
+        selectButton.setPrefHeight(20);
         selectButton.setPrefWidth(90);
         saveXml.setPrefHeight(30);
         saveXml.setPrefWidth(90);
@@ -70,18 +75,20 @@ public class XmlEditor extends Application {
         prettifyButton.setPrefWidth(90);
 
 
-        xmlTextField= new TextField();
-        xmlTextField.setPrefHeight(100);
+        xmlTextArea= new TextArea();
+        xmlTextArea.setPrefHeight(100);
 
 
         flowPane = new FlowPane( xmlLabel);
         flowPane.setAlignment(Pos.CENTER);
+        SaveXMLflowPane = new FlowPane( saveXml);
+        SaveXMLflowPane.setAlignment(Pos.CENTER);
         hBox = new HBox(selectLabel, selectButton);
         hBox.setSpacing(15);
         hBoxButtons = new HBox(validateButton ,convertJsonButton ,compressButton ,decompressButton ,prettifyButton);
         hBoxButtons.setAlignment(Pos.CENTER);
         hBoxButtons.setSpacing(10);
-        vBox = new VBox(flowPane,hBox,xmlTypeLabel, xmlTextField,saveXml, hBoxButtons);
+        vBox = new VBox(flowPane,hBox,xmlTypeLabel, xmlTextArea,SaveXMLflowPane, hBoxButtons);
         vBox.setSpacing(20);
 
         convertJsonButton.setOnAction(new ButtonHandlers.JsonConverterHandler());
@@ -89,8 +96,19 @@ public class XmlEditor extends Application {
         compressButton.setOnAction(new ButtonHandlers.CompressHandler());
         decompressButton.setOnAction(new ButtonHandlers.DecompressHandler());
         prettifyButton.setOnAction(new ButtonHandlers.PrettifyHandler());
-        saveXml.setOnAction(new ButtonHandlers.SaveXmlHandler());
         validateButton.setOnAction(new ButtonHandlers.ValidateHandler());
+        saveXml.setOnAction(action -> {
+            xmlText = xmlTextArea.getText();
+            System.out.println(xmlText);
+            try {
+                xmlTree = new XMLTree(new StringReader(xmlText));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+
+
 
         Scene scene = new Scene(vBox ,550, 400);
         stage.setTitle("XMLEditor");
@@ -98,12 +116,12 @@ public class XmlEditor extends Application {
         stage.show();
     }
 
-    public TextField getXmlTextField() {
-        return xmlTextField;
+    public TextArea getXmlTextarea() {
+        return xmlTextArea;
     }
 
-    public void setXmlTextField(TextField xmlTextField) {
-        this.xmlTextField = xmlTextField;
+    public void setXmlTextArea(TextArea xmlTextArea) {
+        this.xmlTextArea = xmlTextArea;
     }
 
     public XMLTree getRoot() {
