@@ -14,9 +14,12 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+
+import java.io.File;
 import java.io.IOException;
 
 public class XmlEditor extends Application {
+    File file1;
     XMLTree xmlTree = new XMLTree();
     private Button selectButton;
     private Button validateButton;
@@ -81,13 +84,13 @@ public class XmlEditor extends Application {
         vBox = new VBox(flowPane,hBox,xmlTypeLabel, xmlTextField,saveXml, hBoxButtons);
         vBox.setSpacing(20);
 
-//        convertJsonButton.setOnAction(new ButtonHandler.JsonConverterHandler());
-//        selectButton.setOnAction(new ButtonHandler.selectFileHandler());
-//        compressButton.setOnAction(new ButtonHandler.CompressHandler());
-//        decompressButton.setOnAction(new ButtonHandler.DecompressHandler());
-//        prettifyButton.setOnAction(new ButtonHandler.PrettifyHandler());
-//        saveXml.setOnAction(new ButtonHandler.SaveXmlHandler());
-//        validateButton.setOnAction(new ButtonHandler.ValidateHandler());
+        convertJsonButton.setOnAction(new ButtonHandlers.JsonConverterHandler());
+        selectButton.setOnAction(new ButtonHandlers.selectFileHandler());
+        compressButton.setOnAction(new ButtonHandlers.CompressHandler());
+        decompressButton.setOnAction(new ButtonHandlers.DecompressHandler());
+        prettifyButton.setOnAction(new ButtonHandlers.PrettifyHandler());
+        saveXml.setOnAction(new ButtonHandlers.SaveXmlHandler());
+        validateButton.setOnAction(new ButtonHandlers.ValidateHandler());
 
         Scene scene = new Scene(vBox ,550, 400);
         stage.setTitle("XMLEditor");
