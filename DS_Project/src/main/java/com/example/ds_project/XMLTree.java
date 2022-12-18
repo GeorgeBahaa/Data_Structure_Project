@@ -29,7 +29,11 @@ public class XMLTree {
 
     }
 
-    public static XMLTreeNode getRoot()
+	public XMLTree() {
+
+	}
+
+	public static XMLTreeNode getRoot()
     {
         return root;
     }
