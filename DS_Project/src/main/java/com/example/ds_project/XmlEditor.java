@@ -99,7 +99,6 @@ public class XmlEditor extends Application {
         validateButton.setOnAction(new ButtonHandlers.ValidateHandler());
         saveXml.setOnAction(action -> {
             xmlText = xmlTextArea.getText();
-            System.out.println(xmlText);
             try {
                 xmlTree = new XMLTree(new StringReader(xmlText));
             } catch (IOException e) {
