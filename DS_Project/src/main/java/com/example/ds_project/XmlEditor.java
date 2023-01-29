@@ -41,6 +41,7 @@ public class XmlEditor extends Application {
     private HBox hBox;
     private VBox vBox;
     String xmlText = " ";
+    static String xmlFile = "";
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -99,15 +100,14 @@ public class XmlEditor extends Application {
         validateButton.setOnAction(new ButtonHandlers.ValidateHandler());
         saveXml.setOnAction(action -> {
             xmlText = xmlTextArea.getText();
+            xmlFile = String.valueOf(xmlText);
             try {
+                xmlTree = null;
                 xmlTree = new XMLTree(new StringReader(xmlText));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });
-
-
-
 
         Scene scene = new Scene(vBox ,550, 400);
         stage.setTitle("XMLEditor");
