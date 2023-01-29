@@ -11,53 +11,53 @@ public class XMLTree {
     static ArrayList<Integer> errorLines = new ArrayList<>();
     static ArrayList<String> errorMessages = new ArrayList<>();
 	private static String objectJson ="";
-
 	static String objectXMLPretify ="";
+	boolean dataFlag = false;
 
-     static String ObjectJson;
+	static String ObjectJson;
 
-    public XMLTree(File XMLFileReader) throws IOException {
-    	
-        br = new BufferedReader(new FileReader(XMLFileReader));
-        constructTree();
+	public XMLTree(File XMLFileReader) throws IOException {
 
-    }
-    
-    public XMLTree(StringReader XMLStringReader) throws IOException {
- 
-        br = new BufferedReader(XMLStringReader);
-        constructTree();
+		br = new BufferedReader(new FileReader(XMLFileReader));
+		constructTree();
 
-    }
+	}
+
+	public XMLTree(StringReader XMLStringReader) throws IOException {
+
+		br = new BufferedReader(XMLStringReader);
+		constructTree();
+
+	}
 
 	public XMLTree() {
 
 	}
 
 	public static XMLTreeNode getRoot()
-    {
-        return root;
-    }
+	{
+		return root;
+	}
 
-    public ArrayList<Integer> getErrorLines()
-    {
-        return errorLines;
-    }
+	public ArrayList<Integer> getErrorLines()
+	{
+		return errorLines;
+	}
 
-    public ArrayList<String> getErrorMessages()
-    {
-        return errorMessages;
-    }
+	public ArrayList<String> getErrorMessages()
+	{
+		return errorMessages;
+	}
 
-    public String getObjectXMLPretify ()
-    {
-        return objectXMLPretify;
-    }
+	public String getObjectXMLPretify ()
+	{
+		return objectXMLPretify;
+	}
 
-    
-    private void openingTag(Stack<XMLTreeNode> stack, String tagName, int lineNumber) {
-    
-    	XMLTreeNode node = new XMLTreeNode(tagName);
+
+	private void openingTag(Stack<XMLTreeNode> stack, String tagName, int lineNumber) {
+
+		XMLTreeNode node = new XMLTreeNode(tagName);
 		tagName = "";
 		if (stack.isEmpty()) {
 			if(root == null) {
@@ -74,17 +74,17 @@ public class XMLTree {
 				stack.peek().addChild(node);
 				stack.push(node);
 			}
-			
+
 		}
 		else {
 			stack.peek().addChild(node);
 			stack.push(node);
 		}
-    }
-    
-    private void closingTag(Stack<XMLTreeNode> stack, String tagName, int lineNumber, boolean dataFlag) {
-    	if (stack.empty()) {
-			
+	}
+
+	private void closingTag(Stack<XMLTreeNode> stack, String tagName, int lineNumber) {
+		if (stack.empty()) {
+
 			errorLines.add(lineNumber);
 			errorMessages.add("error Missing Opening for Closing Tag: </" + tagName + ">");
 		}
@@ -125,23 +125,171 @@ public class XMLTree {
 				}
 			}
 		}
-    }
-    
-    private void data(Stack<XMLTreeNode> stack, String tagName, int lineNumber, boolean dataFlag,  boolean errorFlag) {
-    	if(errorFlag) {
+	}
+
+	private void data(Stack<XMLTreeNode> stack, String tagName, int lineNumber,  boolean errorFlag) {
+		if(errorFlag) {
 			if(tagName.charAt(0)!='/')
 				openingTag(stack, tagName, lineNumber);
 			else
-				closingTag(stack, tagName.substring(1), lineNumber, dataFlag);
+				closingTag(stack, tagName.substring(1), lineNumber);
 		}
 		else {
-			
+
 			XMLTreeNode node = new XMLTreeNode(tagName);
 			stack.peek().addChild(node);
 			dataFlag = true;
 		}
-		
-    }
+
+	}
+
+	public void constructTree() throws IOException {
+
+		Stack<XMLTreeNode> stack = new Stack();
+		int lineNumber = 0;
+		String line = "";
+		String tagName = "";
+		boolean errorFlag = false;
+
+
+		while ((line = br.readLine()) != null) {
+
+			lineNumber++;
+			int i = 0;
+
+			while (i < line.length()) {
+
+				while (line.charAt(i) == ' ') {
+					i++;
+					if(i == line.length())
+						break;
+				}
+				if(i == line.length())
+					continue;
+
+
+				if (line.charAt(i) == '<') {
+					i++;
+
+					if (line.charAt(i) == '/') {
+
+						//closing tag
+						i++;
+						while (line.charAt(i) != '>') {
+							tagName += line.charAt(i);
+							i++;
+							if(i==line.length()) {
+								errorLines.add(lineNumber);
+								errorMessages.add("Missing character '>'");
+								break;
+							}
+						}
+						i++;
+
+						closingTag(stack, tagName, lineNumber);
+						dataFlag = false;
+						tagName = "";
+
+					}
+
+					else {
+						//opening tag
+
+						if (dataFlag) {
+							dataFlag = false;
+							errorLines.add(lineNumber);
+							errorMessages.add("error Missing Closing for Opening Tag: <" + stack.pop().getValue() + ">");
+						}
+
+						while (line.charAt(i) != '>') {
+							tagName += line.charAt(i);
+							i++;
+							if(i==line.length()) {
+								errorLines.add(lineNumber);
+								errorMessages.add("Missing character '>'");
+								break;
+							}
+							if(line.charAt(i)==' ') {
+								errorLines.add(lineNumber);
+								errorMessages.add("Missing character '>'");
+								break;
+							}
+						}
+
+						i++;
+
+						openingTag(stack, tagName, lineNumber);
+						tagName = "";
+					}
+				}
+				else {
+
+					while ((i < line.length()) && (line.charAt(i) != '<')) {
+						if(line.charAt(i)=='>') {
+							errorLines.add(lineNumber);
+							errorMessages.add("Missing character '<'");
+							errorFlag = true;
+							break;
+						}
+						if((line.charAt(i)=='/')&&(tagName.length()!=0)) {
+							data(stack, tagName, lineNumber,  errorFlag);
+							tagName = "";
+							continue;
+						}
+
+						tagName += line.charAt(i);
+						i++;
+					}
+
+					data(stack, tagName, lineNumber,  errorFlag);
+					if(errorFlag) {
+						i++;
+						errorFlag = false;
+					}
+					tagName = "";
+				}
+			}
+		}
+
+		if (!stack.isEmpty()) {
+			errorLines.add(lineNumber);
+
+			while (!stack.isEmpty()) {
+				if(stack.peek().getValue().equals("ROOT"))
+					return;
+				errorMessages.add("Missing Closing Tag for: <" + stack.pop().getValue() + ">");
+			}
+		}
+	}
+
+	public void XMLPrettify(){
+
+		prettify(root, 0);
+
+	}
+
+	private void prettify(XMLTreeNode node, int indentation){
+
+
+		if (node.getChildren().size()==0) {
+
+			objectXMLPretify += (node.getValue().indent(indentation));
+			return;
+
+		}
+
+		objectXMLPretify += (("<" + node.getValue() + ">").indent(indentation));
+
+		for (int i = 0; i < node.getChildren().size(); i++) {
+
+			prettify(node.getChildren().get(i), indentation + 4);
+
+		}
+
+		objectXMLPretify += (("</" + node.getValue() + ">").indent(indentation));
+	}
+
+
 	public static int depth(XMLTreeNode node, String value) {
 		if (node.getValue() == value) {
 			return 0;
@@ -176,147 +324,11 @@ public class XMLTree {
 		}
 	}
 
-	public void constructTree() throws IOException {
-
-		Stack<XMLTreeNode> stack = new Stack();
-		int lineNumber = 0;
-		String line = "";
-		String tagName = "";
-		boolean errorFlag = false;
-		boolean dataFlag = false;
-		
-		
-		while ((line = br.readLine()) != null) {
-
-			lineNumber++;
-			int i = 0;
-
-			while (i < line.length()) {
-
-				while (line.charAt(i) == ' ') {
-					i++;
-					if(i == line.length())
-						break;
-				}
-				if(i == line.length())
-					continue;
-					
-
-				if (line.charAt(i) == '<') {
-					i++;
-
-					if (line.charAt(i) == '/') {
-
-						//closing tag
-						i++;
-						while (line.charAt(i) != '>') {
-							tagName += line.charAt(i);
-							i++;
-							if(i==line.length()) {
-								errorLines.add(lineNumber);
-								errorMessages.add("Missing character '>'");
-								break;
-							}
-						}
-						i++;
-						
-						closingTag(stack, tagName, lineNumber, dataFlag);
-						dataFlag = false;
-						tagName = "";
-
-					}
-
-					else {
-						//opening tag
-						
-						if (dataFlag) {
-							dataFlag = false;
-							errorLines.add(lineNumber);
-							errorMessages.add("Missing closing tag of: <" + stack.pop().getValue() + ">");
-						}
-
-						while (line.charAt(i) != '>') {
-							tagName += line.charAt(i);
-							i++;
-							if(i==line.length()) {
-								errorLines.add(lineNumber);
-								errorMessages.add("Missing character '>'");
-								break;
-							}
-						}
-
-						i++;
-						
-						openingTag(stack, tagName, lineNumber);
-						tagName = "";
-					}
-				}
-				else {
-
-					while ((i < line.length()) && (line.charAt(i) != '<')) {
-						if(line.charAt(i)=='>') {
-							errorLines.add(lineNumber);
-							errorMessages.add("Missing character '<'");
-							errorFlag = true;
-							break;
-						}
-						if((line.charAt(i)=='/')&&(tagName.length()!=0)) {
-							data(stack, tagName, lineNumber, dataFlag,  errorFlag);
-							tagName = "";
-							continue;
-						}
-							
-						tagName += line.charAt(i);
-						i++;
-					}
-					
-					data(stack, tagName, lineNumber, dataFlag,  errorFlag);
-					if(errorFlag) {
-						i++;
-						errorFlag = false;
-					}
-					tagName = "";
-				}
-			}
-		}
-		
-		if (!stack.isEmpty()) {
-			errorLines.add(lineNumber);
-
-			while (!stack.isEmpty()) {
-				if(stack.peek().getValue().equals("ROOT"))
-					return;
-				errorMessages.add("Missing Closing Tag for: <" + stack.pop().getValue() + ">");
-			}
-		}
-	}
-
-	public void XMLPrettify(){
-
-		prettify(root, 0);
-
-	}
-
-	private void prettify(XMLTreeNode node, int indentation){
 
 
-		if (node.getChildren().size()==0) {
 
-			objectXMLPretify += (node.getValue().indent(indentation));
-			return;
 
-		}
 
-		objectXMLPretify += (("<" + node.getValue() + ">").indent(indentation));
-		
-		for (int i = 0; i < node.getChildren().size(); i++) {
-
-			prettify(node.getChildren().get(i), indentation + 4);
-
-		}
-
-		objectXMLPretify += (("</" + node.getValue() + ">").indent(indentation));
-	}
 
 	public static void printJson (XMLTreeNode node) {
 		if (node == root){
