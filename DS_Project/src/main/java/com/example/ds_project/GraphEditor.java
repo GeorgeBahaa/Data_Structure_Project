@@ -5,10 +5,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -38,6 +35,10 @@ public class GraphEditor extends GUIEditor implements EventHandler {
     private VBox vBoxLabel;
     private HBox hBox;
     private VBox vBox;
+    static TextField textField = new TextField();
+    static TextField usertext3 = new TextField();
+    static TextField usertext1 = new TextField();
+    static TextField usertext2 = new TextField();
 
 
     public TextArea getXmlTextarea() {
@@ -76,7 +77,7 @@ public class GraphEditor extends GUIEditor implements EventHandler {
         flowPane = new FlowPane(graphLabel);
         flowPane.setAlignment(Pos.CENTER);
 
-        TextField textField = new TextField();
+
         textField.setPromptText("Enter word");
 
         Label searchlabel = new Label("Enter word to search");
@@ -89,16 +90,26 @@ public class GraphEditor extends GUIEditor implements EventHandler {
         mutuallabel.setFont(Font.font("Cambria" , FontWeight.SEMI_BOLD, FontPosture.REGULAR,15));
         Label suggestlabel = new Label("Suggest Followers");
         suggestlabel.setFont(Font.font("Cambria" , FontWeight.SEMI_BOLD, FontPosture.REGULAR,15));
-        vBoxLabel = new VBox(influencerlabel,activeuserlabel,mutuallabel,suggestlabel);
+
+        HBox spin = new HBox(new Label("User1"),usertext1,new Label("User2"),usertext2);
+        spin.setSpacing(10);
+        vBoxLabel = new VBox(influencerlabel,activeuserlabel,mutuallabel);
         vBoxLabel.setSpacing(30);
-        vBoxButtons = new VBox(mostInfluencerButton,activeUserButton,mutualUsersButton,suggestFollowersButton);
+        vBoxButtons = new VBox(mostInfluencerButton,activeUserButton,mutualUsersButton);
         vBoxButtons.setAlignment(Pos.CENTER);
+        vBoxButtons.requestLayout();
         vBoxButtons.setSpacing(20);
         hBox = new HBox(vBoxLabel,vBoxButtons);
         hBox.setSpacing(15);
+        //suggestFollowersButton.setAlignment(Pos.CENTER);
+        HBox hbox2 = new HBox(suggestlabel,suggestFollowersButton);
+        hbox2.setSpacing(60);
         FlowPane flow = new FlowPane(searchlabel,textField,searchButton);
         flow.setHgap(10);
-        vBox = new VBox(flowPane,flow,hBox);
+
+        HBox spin2 = new HBox(new Label("User ID"),usertext3);
+        spin2.setSpacing(10);
+        vBox = new VBox(flowPane,flow,hBox,spin,hbox2,spin2);
         vBox.setFillWidth(true);
         vBox.setStyle("-fx-padding: 16;");
         vBox.setSpacing(20);
