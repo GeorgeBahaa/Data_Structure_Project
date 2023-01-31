@@ -18,7 +18,7 @@ public class ButtonHandlers {
 
     //static String xmlFile = "";
     static HuffmanNode node = new HuffmanNode();
-    static class selectFileHandler extends XmlEditor implements EventHandler {
+    static class selectFileHandler extends XMLEditor implements EventHandler {
 
 
         @Override
@@ -97,7 +97,7 @@ public class ButtonHandlers {
 
 
 
-    static class JsonConverterHandler extends XmlEditor implements EventHandler {
+    static class JsonConverterHandler extends XMLEditor implements EventHandler {
 
         Label label = new Label();
 
@@ -150,13 +150,13 @@ public class ButtonHandlers {
                 writer.println(content);
                 writer.close();
             } catch (IOException ex) {
-                Logger.getLogger(XmlEditor.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(XMLEditor.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
     }
 
-    static class PrettifyHandler extends XmlEditor implements EventHandler {
+    static class PrettifyHandler extends XMLEditor implements EventHandler {
 
         Label label = new Label();
 
@@ -216,11 +216,11 @@ public class ButtonHandlers {
                 writer.println(content);
                 writer.close();
             } catch (IOException ex) {
-                Logger.getLogger(XmlEditor.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(XMLEditor.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
-        static class CompressHandler extends XmlEditor implements EventHandler {
+        static class CompressHandler extends XMLEditor implements EventHandler {
             Label label = new Label();
             String compressed = "";
             @Override
@@ -289,7 +289,7 @@ public class ButtonHandlers {
             }
         }
 
-            static class DecompressHandler extends XmlEditor implements EventHandler {
+            static class DecompressHandler extends XMLEditor implements EventHandler {
                 Label label;
                 Label label1;
                 File file;
@@ -347,7 +347,7 @@ public class ButtonHandlers {
                 }
             }
 
-            static class ValidateHandler extends XmlEditor implements EventHandler {
+            static class ValidateHandler extends XMLEditor implements EventHandler {
                 @Override
                 public void handle(Event event) {
                     Stage stage = new Stage();
