@@ -1,4 +1,4 @@
-package Data.Structure.and.Algorithms.Project;
+package com.example.ds_project;
 
 import java.util.ArrayList;
 

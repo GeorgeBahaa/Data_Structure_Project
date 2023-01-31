@@ -1,6 +1,8 @@
 package com.example.ds_project;
 
 import javafx.application.Application;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -19,50 +21,36 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 
-public class XMLEditor extends Application {
-    File file1;
-    XMLTree xmlTree = new XMLTree();
-    private Button selectButton;
+public class XMLEditor extends GUIEditor implements EventHandler {
+
+
     private Button validateButton;
     private Button convertJsonButton;
     private Button compressButton ;
     private Button decompressButton;
     private Button prettifyButton;
-    private Button saveXml;
+
     private Label xmlLabel;
-    private Label selectLabel;
-    private Label xmlTypeLabel;
+
     TextArea xmlTextArea = new TextArea();
     private FlowPane flowPane;
-    private FlowPane SaveXMLflowPane;
-
-    private HBox hBoxButtons;
+    private VBox vBoxButtons;
     private HBox hBox;
     private VBox vBox;
-    String xmlText = " ";
-    static String xmlFile = "";
+
 
     @Override
-    public void start(Stage stage) throws IOException {
+    public void handle(Event event)  {
+        Stage stage = new Stage();
         xmlLabel = new Label("XML Editor");
         xmlLabel.setTextFill(Color.DARKBLUE);
         xmlLabel.setFont(Font.font("Arial" , FontWeight.BOLD , FontPosture.ITALIC, 28));
-        xmlTypeLabel= new Label(" Type XML Text");
-        xmlTypeLabel.setFont(Font.font("Arial" , FontWeight.NORMAL , FontPosture.ITALIC, 20));
-        selectLabel = new Label(" SelectFile");
-        selectLabel.setFont(Font.font("Arial" , FontWeight.NORMAL , FontPosture.ITALIC,20));
 
-        selectButton = new Button("Browse");
         validateButton = new Button("validate");
         convertJsonButton = new Button("convertJson");
         compressButton = new Button("compress");
         decompressButton = new Button(" decompress");
         prettifyButton = new Button("prettify");
-        saveXml = new Button("saveXml");
-        selectButton.setPrefHeight(20);
-        selectButton.setPrefWidth(90);
-        saveXml.setPrefHeight(30);
-        saveXml.setPrefWidth(90);
         validateButton.setPrefHeight(30);
         validateButton.setPrefWidth(90);
         convertJsonButton.setPrefHeight(30);
@@ -75,40 +63,37 @@ public class XMLEditor extends Application {
         prettifyButton.setPrefWidth(90);
 
 
-        xmlTextArea= new TextArea();
-        xmlTextArea.setPrefHeight(100);
-
-
         flowPane = new FlowPane( xmlLabel);
         flowPane.setAlignment(Pos.CENTER);
-        SaveXMLflowPane = new FlowPane( saveXml);
-        SaveXMLflowPane.setAlignment(Pos.CENTER);
-        hBox = new HBox(selectLabel, selectButton);
-        hBox.setSpacing(15);
-        hBoxButtons = new HBox(validateButton ,convertJsonButton ,compressButton ,decompressButton ,prettifyButton);
-        hBoxButtons.setAlignment(Pos.CENTER);
-        hBoxButtons.setSpacing(10);
-        vBox = new VBox(flowPane,hBox,xmlTypeLabel, xmlTextArea,SaveXMLflowPane, hBoxButtons);
-        vBox.setSpacing(20);
 
+        Label validatelabel = new Label("Validate XML");
+        validatelabel.setFont(Font.font("Cambria" , FontWeight.SEMI_BOLD, FontPosture.REGULAR,15));
+        Label jsonlabel = new Label("Convert XML to Json");
+        jsonlabel.setFont(Font.font( "Cambria", FontWeight.SEMI_BOLD , FontPosture.REGULAR,15));
+        Label compresslabel = new Label("Compress XML");
+        compresslabel.setFont(Font.font( "Cambria", FontWeight.SEMI_BOLD , FontPosture.REGULAR,15));
+        Label decompresslabel = new Label("Decompress File");
+        decompresslabel.setFont(Font.font("Cambria" , FontWeight.SEMI_BOLD , FontPosture.REGULAR,15));
+        Label prettifyLabel = new Label("Prettify XML");
+        prettifyLabel.setFont(Font.font("Cambria" , FontWeight.SEMI_BOLD , FontPosture.REGULAR,15));
+        VBox vBoxLabel = new VBox(validatelabel,jsonlabel,compresslabel,decompresslabel,prettifyLabel);
+        vBoxLabel.setSpacing(28);
+        vBoxButtons = new VBox(validateButton,convertJsonButton,compressButton ,decompressButton ,prettifyButton);
+        vBoxButtons.setAlignment(Pos.CENTER);
+        vBoxButtons.setSpacing(15);
+        hBox = new HBox(vBoxLabel,vBoxButtons);
+        hBox.setSpacing(15);
+        vBox = new VBox(flowPane,hBox);
+        vBox.setSpacing(20);
+        vBox.setStyle("-fx-padding: 16;");
         convertJsonButton.setOnAction(new ButtonHandlers.JsonConverterHandler());
-        selectButton.setOnAction(new ButtonHandlers.selectFileHandler());
         compressButton.setOnAction(new ButtonHandlers.CompressHandler());
         decompressButton.setOnAction(new ButtonHandlers.DecompressHandler());
         prettifyButton.setOnAction(new ButtonHandlers.PrettifyHandler());
         validateButton.setOnAction(new ButtonHandlers.ValidateHandler());
-        saveXml.setOnAction(action -> {
-            xmlText = xmlTextArea.getText();
-            xmlFile = String.valueOf(xmlText);
-            try {
-                xmlTree = null;
-                xmlTree = new XMLTree(new StringReader(xmlText));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
 
-        Scene scene = new Scene(vBox ,550, 400);
+        Scene scene = new Scene(vBox, 550, 400);
+
         stage.setTitle("XMLEditor");
         stage.setScene(scene);
         stage.show();

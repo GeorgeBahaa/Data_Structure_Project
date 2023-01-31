@@ -14,87 +14,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ButtonHandlers {
-    static String path;
 
-    //static String xmlFile = "";
     static HuffmanNode node = new HuffmanNode();
-    static class selectFileHandler extends XMLEditor implements EventHandler {
-
-
-        @Override
-        public void handle(Event event) {
-
-            Stage stage = new Stage();
-            stage.setTitle("FileChooser");
-            FileChooser filechooser = new FileChooser();
-            Label label = new Label("no files selected");
-            Button button = new Button("Select file");
-            EventHandler<ActionEvent> event1 =
-                    new EventHandler<ActionEvent>() {
-                        public void handle(ActionEvent e) {
-                            xmlTree = null;
-
-                            file1 = filechooser.showOpenDialog(stage);
-
-                            if (file1 != null) {
-
-                                label.setText(file1.getAbsolutePath()
-                                        + " selected");
-                                path = file1.getAbsolutePath();
-                                try {
-                                    xmlTree = new XMLTree(file1);
-                                    BufferedReader br;
-                                    try {
-                                        br = new BufferedReader(new FileReader(file1));
-                                    } catch (FileNotFoundException e1) {
-                                        throw new RuntimeException(e1);
-                                    }
-
-                                } catch (IOException ex) {
-                                    ex.printStackTrace();
-                                }
-                            } else {
-                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                                alert.setTitle("Error");
-                                alert.setHeaderText("You should select xml file");
-                                alert.showAndWait();
-                            }
-                            String line = "";
-                            BufferedReader br = null;
-                            try {
-                                if (path != null) {
-                                    br = new BufferedReader(new FileReader(path));
-                                }
-                                else {
-                                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                                    alert.setTitle("Error");
-                                    alert.setHeaderText("Select XML file first");
-                                    alert.showAndWait();
-                                }
-                            } catch (FileNotFoundException error) {
-                                throw new RuntimeException(error);
-                            }
-                            while (true) {
-                                try {
-                                    if (!((line = br.readLine()) != null)) break;
-                                } catch (IOException error) {
-                                    throw new RuntimeException(error);
-                                }
-                                xmlFile += line;
-                            }
-
-                        }
-                    };
-            button.setOnAction(event1);
-            VBox vbox = new VBox(label, button);
-            vbox.setSpacing(20);
-            vbox.setAlignment(Pos.CENTER);
-            Scene scene = new Scene(vbox, 200, 150);
-            stage.setScene(scene);
-            stage.show();
-        }
-    }
-
 
 
     static class JsonConverterHandler extends XMLEditor implements EventHandler {
