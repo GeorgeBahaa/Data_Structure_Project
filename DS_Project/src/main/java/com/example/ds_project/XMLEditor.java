@@ -29,9 +29,7 @@ public class XMLEditor extends GUIEditor implements EventHandler {
     private Button compressButton ;
     private Button decompressButton;
     private Button prettifyButton;
-
     private Label xmlLabel;
-
     TextArea xmlTextArea = new TextArea();
     private FlowPane flowPane;
     private VBox vBoxButtons;
@@ -45,7 +43,6 @@ public class XMLEditor extends GUIEditor implements EventHandler {
         xmlLabel = new Label("XML Editor");
         xmlLabel.setTextFill(Color.DARKBLUE);
         xmlLabel.setFont(Font.font("Arial" , FontWeight.BOLD , FontPosture.ITALIC, 28));
-
         validateButton = new Button("validate");
         convertJsonButton = new Button("convertJson");
         compressButton = new Button("compress");
@@ -61,11 +58,8 @@ public class XMLEditor extends GUIEditor implements EventHandler {
         decompressButton.setPrefWidth(90);
         prettifyButton.setPrefHeight(30);
         prettifyButton.setPrefWidth(90);
-
-
         flowPane = new FlowPane( xmlLabel);
         flowPane.setAlignment(Pos.CENTER);
-
         Label validatelabel = new Label("Validate XML");
         validatelabel.setFont(Font.font("Cambria" , FontWeight.SEMI_BOLD, FontPosture.REGULAR,15));
         Label jsonlabel = new Label("Convert XML to Json");
