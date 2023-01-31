@@ -11,7 +11,8 @@ public class XMLGraph {
     static String id;
     static  PriorityQueue<Pair<Integer, Integer> > pq = new PriorityQueue<>((a, b) -> b.getKey() - a.getKey());
     private static ArrayList<Integer> inputArray;
-
+    public static int activ;
+    public static int activfollow;
 
     public static void constructGraph(XMLTreeNode xmlTreeNode){
 
@@ -72,7 +73,7 @@ public class XMLGraph {
                     continue;
                 }
                 else
-                {active[xmlGraphNodes.get(i).get(j)]++;
+                {    active[xmlGraphNodes.get(i).get(j)]++;
                     addEdge(xmlGraphFriends, xmlGraphNodes.get(i).get(j),i);
 
                 }
@@ -86,6 +87,8 @@ public class XMLGraph {
                 index=i;
             }
         }
+        activ = index;
+        activfollow = max;
         System.out.println("The Most active user has ID "+index+" follow "+max+ " user");
     }
 
