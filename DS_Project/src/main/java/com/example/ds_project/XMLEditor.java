@@ -1,6 +1,5 @@
 package com.example.ds_project;
 
-import javafx.application.Application;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -16,10 +15,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.StringReader;
 
 public class XMLEditor extends GUIEditor implements EventHandler {
 
@@ -80,11 +75,11 @@ public class XMLEditor extends GUIEditor implements EventHandler {
         vBox = new VBox(flowPane,hBox);
         vBox.setSpacing(20);
         vBox.setStyle("-fx-padding: 16;");
-        convertJsonButton.setOnAction(new ButtonHandlers.JsonConverterHandler());
-        compressButton.setOnAction(new ButtonHandlers.CompressHandler());
-        decompressButton.setOnAction(new ButtonHandlers.DecompressHandler());
-        prettifyButton.setOnAction(new ButtonHandlers.PrettifyHandler());
-        validateButton.setOnAction(new ButtonHandlers.ValidateHandler());
+        convertJsonButton.setOnAction(new XmlEditorHandlers.JsonConverterHandler());
+        compressButton.setOnAction(new XmlEditorHandlers.CompressHandler());
+        decompressButton.setOnAction(new XmlEditorHandlers.DecompressHandler());
+        prettifyButton.setOnAction(new XmlEditorHandlers.PrettifyHandler());
+        validateButton.setOnAction(new XmlEditorHandlers.ValidateHandler());
 
         Scene scene = new Scene(vBox, 550, 400);
 

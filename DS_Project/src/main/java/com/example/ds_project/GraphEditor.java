@@ -110,11 +110,11 @@ public class GraphEditor extends GUIEditor implements EventHandler {
         vBox.setStyle("-fx-padding: 16;");
         vBox.setSpacing(20);
 
-        searchButton.setOnAction(new GraphHandlers.SearchHandler());
-        mostInfluencerButton.setOnAction(new GraphHandlers.MostInfluencerHandler());
-        activeUserButton.setOnAction(new GraphHandlers.ActiveUserHandler());
-        mutualUsersButton.setOnAction(new GraphHandlers.MutualFollowersHandler());
-        suggestFollowersButton.setOnAction(new GraphHandlers.SuggestFollowersHandler());
+        searchButton.setOnAction(new GraphEditorHandlers.SearchHandler());
+        mostInfluencerButton.setOnAction(new GraphEditorHandlers.MostInfluencerHandler());
+        activeUserButton.setOnAction(new GraphEditorHandlers.ActiveUserHandler());
+        mutualUsersButton.setOnAction(new GraphEditorHandlers.MutualFollowersHandler());
+        suggestFollowersButton.setOnAction(new GraphEditorHandlers.SuggestFollowersHandler());
 
 
         Scene scene = new Scene(vBox, 550, 400);

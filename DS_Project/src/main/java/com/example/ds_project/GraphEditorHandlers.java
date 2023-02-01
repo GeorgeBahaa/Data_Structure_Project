@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import static com.example.ds_project.XMLGraph.*;
 
 
-public class GraphHandlers {
+public class GraphEditorHandlers {
 
     // static XMLGraph xmlGraph = new XMLGraph();
     static class MostInfluencerHandler extends GraphEditor implements EventHandler{

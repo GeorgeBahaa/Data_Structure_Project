@@ -13,7 +13,7 @@ import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ButtonHandlers {
+public class XmlEditorHandlers {
 
     static HuffmanNode node = new HuffmanNode();
 
