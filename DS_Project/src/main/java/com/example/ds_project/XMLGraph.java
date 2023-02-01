@@ -102,6 +102,7 @@ public class XMLGraph {
 
         ArrayList<Integer> followrsOfFollowers = new ArrayList<>();
         ArrayList<Integer> suggestions = new ArrayList<>();
+        sug="\n";
 
         for(int k=1 ; k< xmlGraphNodes.size() ; k++) {
 
@@ -134,6 +135,7 @@ public class XMLGraph {
                 sug+=" -Users ID(s) "+ suggestions+"\n\n";
             }
             suggestions.clear();
+
         }
 
         //System.out.println(sug);

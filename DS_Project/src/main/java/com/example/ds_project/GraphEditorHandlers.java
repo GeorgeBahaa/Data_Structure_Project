@@ -165,6 +165,7 @@ public class GraphEditorHandlers {
             Scene scene = new Scene(vbox, 400, 400);
             stage.setScene(scene);
             if (XMLTree.getRoot() != null) stage.show();
+
         }
     }
     static class SearchHandler extends GraphEditor implements EventHandler{
