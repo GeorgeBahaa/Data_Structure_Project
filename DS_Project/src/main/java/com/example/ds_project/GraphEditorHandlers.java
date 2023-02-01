@@ -170,7 +170,6 @@ public class GraphEditorHandlers {
     static class SearchHandler extends GraphEditor implements EventHandler{
         Label label;
         PostDatabase searchpost;
-
         String POST = "";
         ArrayList<Post> posts;
 
@@ -183,7 +182,11 @@ public class GraphEditorHandlers {
             posts = searchpost.search(textField.getText());
             for(Post post : posts) {
                 POST += "User ID: "+ post.getUserID()+"\n"+"Topic(s): "+ post.getTopics() +"\n"+ "Post: " + post.getBody()+"\n\n";
-            } }
+            }
+            if (posts.size()==0){
+                POST += "\t \t \t \t \t Not found";
+            }
+          }
           catch (Exception exception) {
               Alert alert = new Alert(Alert.AlertType.INFORMATION);
               alert.setTitle("Error");
@@ -203,6 +206,11 @@ public class GraphEditorHandlers {
             Scene scene = new Scene(vbox, 400, 400);
             stage.setScene(scene);
             if (XMLTree.getRoot() != null) stage.show();
+
+            searchpost = null;
+            posts.clear();
+            POST=" ";
+
         }
     }
 }
