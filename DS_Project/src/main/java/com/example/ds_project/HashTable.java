@@ -27,7 +27,7 @@ public class HashTable {
 
     void insert(String keyword){
         int key =  (int) computeHash(keyword);
-        System.out.println(key);
+        //System.out.println(key);
         if(hashtable[key]==null){
             hashtable[key] = new ArrayList<String>();
         }
