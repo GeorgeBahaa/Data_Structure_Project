@@ -14,6 +14,7 @@ public class XMLGraph {
     private static ArrayList<Integer> inputArray;
     public static int activ;
     public static int activfollow;
+    public static String sug=" ";
 
     public static void constructGraph(XMLTreeNode xmlTreeNode){
 
@@ -97,31 +98,41 @@ public class XMLGraph {
     public static void getInfluencer(){
         System.out.println("the Infuencer has ID "+pq.peek().getValue()+" and has "+ pq.peek().getKey()+" followers");
     }
+    public static void suggestFollowers(){
 
-    public static void suggestFollowers(int id){
         ArrayList<Integer> followrsOfFollowers = new ArrayList<>();
         ArrayList<Integer> suggestions = new ArrayList<>();
-        for(int i=0 ; i<xmlGraphNodes.get(id).size() ; i++) {
-            followrsOfFollowers.addAll(xmlGraphNodes.get(xmlGraphNodes.get(id).get(i)));
-        }
 
-        inputArray=followrsOfFollowers;
-        sortGivenArray();
+        for(int k=0 ; k< xmlGraphNodes.size() ; k++) {
 
-        for (int i=1 ; i< followrsOfFollowers.size() ; i++){
-            if(followrsOfFollowers.get(i-1)==followrsOfFollowers.get(i)){
-                followrsOfFollowers.remove(i);
+            sug+="Suggestions for User ID "+k+'\n';
+            int id=k;
+
+            for(int i=0 ; i<xmlGraphNodes.get(id).size() ; i++) {
+                followrsOfFollowers.addAll(xmlGraphNodes.get(xmlGraphNodes.get(id).get(i)));
             }
-        }
+            inputArray=followrsOfFollowers;
 
-        for(int i=0;i<followrsOfFollowers.size();i++){
-            if(binarySearch(xmlGraphFriends.get(id),followrsOfFollowers.get(i))==0){
-                if(id==followrsOfFollowers.get(i)) continue;
-                else suggestions.add(followrsOfFollowers.get(i));
+            sortGivenArray();
+
+            for (int i=1 ; i< followrsOfFollowers.size() ; i++){
+                if(followrsOfFollowers.get(i-1)==followrsOfFollowers.get(i)){
+                    followrsOfFollowers.remove(i);
+                }
             }
 
+            for(int i=0;i<followrsOfFollowers.size();i++){
+                if(binarySearch(xmlGraphFriends.get(id),followrsOfFollowers.get(i))==0){
+                    if(id==followrsOfFollowers.get(i)) continue;
+                    else suggestions.add(followrsOfFollowers.get(i));
+                }
+
+            }
+            sug+="Users "+suggestions+"\n";
+            suggestions.clear();
         }
-        System.out.println(suggestions);
+
+        System.out.println(sug);
     }
 
     public static void mutualfriend(int ID1,int ID2){

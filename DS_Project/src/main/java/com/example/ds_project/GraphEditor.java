@@ -36,7 +36,6 @@ public class GraphEditor extends GUIEditor implements EventHandler {
     private HBox hBox;
     private VBox vBox;
     static TextField textField = new TextField();
-    static TextField usertext3 = new TextField();
     static TextField usertext1 = new TextField();
     static TextField usertext2 = new TextField();
 
@@ -106,10 +105,7 @@ public class GraphEditor extends GUIEditor implements EventHandler {
         hbox2.setSpacing(60);
         FlowPane flow = new FlowPane(searchlabel,textField,searchButton);
         flow.setHgap(10);
-
-        HBox spin2 = new HBox(new Label("User ID"),usertext3);
-        spin2.setSpacing(10);
-        vBox = new VBox(flowPane,flow,hBox,spin,hbox2,spin2);
+        vBox = new VBox(flowPane,flow,hBox,spin,hbox2);
         vBox.setFillWidth(true);
         vBox.setStyle("-fx-padding: 16;");
         vBox.setSpacing(20);

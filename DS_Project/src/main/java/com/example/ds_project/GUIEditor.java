@@ -22,21 +22,16 @@ import java.io.*;
 public class GUIEditor extends Application {
     private Button saveXml;
     XMLTree xmlTree = new XMLTree();
-
     static String path;
     File file1;
     private Label xmlLabel;
     private Label selectLabel;
-
     private Label xmlTypeLabel;
     private Button selectButton;
-
     TextArea xmlTextArea = new TextArea();
-
     CheckBox c1;
     private Label guilabel;
     CheckBox c2;
-
     private FlowPane flowPane;
     private HBox hbox;
     private VBox vBox;

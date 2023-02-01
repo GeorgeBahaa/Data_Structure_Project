@@ -20,44 +20,52 @@ public class GraphHandlers {
 
     // static XMLGraph xmlGraph = new XMLGraph();
     static class MostInfluencerHandler extends GraphEditor implements EventHandler{
-        Label label;
+        Label label=new Label();
 
         @Override
         public void handle(Event event) {
+            try {
             XMLGraph.constructGraph(xmlTree.getRoot());
             XMLGraph.MergeSortAll();
-            Stage stage = new Stage();
-            stage.setTitle("Most Influencer");
-            if (XMLTree.getRoot() == null) {
+            XMLGraph.getInfluencer();
+                label.setText("The Infuencer has ID "+pq.peek().getValue()+" and has "+ pq.peek().getKey()+" followers" );
+
+        }
+            catch (Exception exception) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Error");
                 alert.setHeaderText("You should select xml file");
                 alert.showAndWait();
             }
-            Label label = new Label("The Infuencer has ID "+pq.peek().getValue()+" and has "+ pq.peek().getKey()+" followers" );
+
+            Stage stage = new Stage();
+            stage.setTitle("Most Influencer");
+
             VBox vbox = new VBox(label);
             vbox.setSpacing(20);
             vbox.setAlignment(Pos.CENTER);
             Scene scene = new Scene(vbox, 400, 400);
             stage.setScene(scene);
             if (XMLTree.getRoot() != null) stage.show();
-            // getInfluencer();
         }
     }
+
     static class ActiveUserHandler extends GraphEditor implements EventHandler{
         @Override
         public void handle(Event event) {
+            try {
             XMLGraph.constructGraph(xmlTree.getRoot());
             XMLGraph.MergeSortAll();
-            getMostActive();
-            Stage stage = new Stage();
-            stage.setTitle("Active User");
-            if (XMLTree.getRoot() == null) {
+            getMostActive(); }
+            catch (Exception exception) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Error");
                 alert.setHeaderText("You should select xml file");
                 alert.showAndWait();
             }
+
+            Stage stage = new Stage();
+            stage.setTitle("Active User");
             Label label = new Label("The Most active user has ID "+activ+"and follows "+activfollow+ " user(s)");
             VBox vbox = new VBox(label);
             vbox.setSpacing(20);
@@ -76,17 +84,20 @@ public class GraphHandlers {
         public void handle(Event event) {
             UserID1 = usertext1.getText();
             UserID2 = usertext2.getText();
+            try {
+
             XMLGraph.constructGraph(xmlTree.getRoot());
             XMLGraph.MergeSortAll();
-            mutualfriend(Integer.parseInt(UserID1),Integer.parseInt(UserID2));
-            Stage stage = new Stage();
-            stage.setTitle("Mutual Followers");
-            if (XMLTree.getRoot() == null) {
+            mutualfriend(Integer.parseInt(UserID1),Integer.parseInt(UserID2)); }
+            catch (Exception exception) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Error");
                 alert.setHeaderText("You should select xml file");
                 alert.showAndWait();
             }
+            Stage stage = new Stage();
+            stage.setTitle("Mutual Followers");
+
             label = new Label("Mutual Followers ID(s):"+mutualFriends.toString());
             VBox vbox = new VBox(label);
             vbox.setSpacing(20);
@@ -97,23 +108,24 @@ public class GraphHandlers {
         }
     }
     static class SuggestFollowersHandler extends GraphEditor implements EventHandler{
-        String UserID = "";
-        Label label;
+        Label label=new Label();
         @Override
         public void handle(Event event) {
-            UserID = usertext3.getText();
+            try{
             XMLGraph.constructGraph(xmlTree.getRoot());
             XMLGraph.MergeSortAll();
-            suggestFollowers(Integer.parseInt(UserID));
-            Stage stage = new Stage();
-            stage.setTitle("Suggestions");
-            if (XMLTree.getRoot() == null) {
+            XMLGraph.suggestFollowers();
+                 }
+
+            catch (Exception exception) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Error");
                 alert.setHeaderText("You should select xml file");
                 alert.showAndWait();
             }
-            label = new Label("Suggested to follow ID(s):");
+            label = new Label(sug);
+            Stage stage = new Stage();
+            stage.setTitle("Suggestions");
             VBox vbox = new VBox(label);
             vbox.setSpacing(20);
             vbox.setAlignment(Pos.CENTER);
@@ -133,17 +145,18 @@ public class GraphHandlers {
         public void handle(Event event) {
             Stage stage = new Stage();
             stage.setTitle("Posts");
-            if (XMLTree.getRoot() == null) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Error");
-                alert.setHeaderText("You should select xml file");
-                alert.showAndWait();
-            }
+          try {
             searchpost = new PostDatabase(xmlTree.getRoot());
             posts = searchpost.search(textField.getText());
             for(Post post : posts) {
                 POST += "User ID: "+ post.getUserID()+"\n"+"Topic(s): "+ post.getTopics() +"\n"+ "Post: " + post.getBody()+"\n\n";
-            }
+            } }
+          catch (Exception exception) {
+              Alert alert = new Alert(Alert.AlertType.INFORMATION);
+              alert.setTitle("Error");
+              alert.setHeaderText("You should select xml file");
+              alert.showAndWait();
+          }
             label = new Label(POST);
             label.setFont(new Font("Arial", 13));
             label.setWrapText(true);
