@@ -128,7 +128,7 @@ public class XMLGraph {
                 }
 
             }
-            sug+="Users "+suggestions+"\n";
+            sug+=" -Users ID(s) "+ suggestions+"\n\n";
             suggestions.clear();
         }
 

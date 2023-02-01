@@ -104,6 +104,10 @@ public class GUIEditor extends Application {
             try {
                 xmlTree = null;
                 xmlTree = new XMLTree(new StringReader(xmlText));
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Confirmation");
+                alert.setHeaderText("XMl Saved");
+                alert.showAndWait();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

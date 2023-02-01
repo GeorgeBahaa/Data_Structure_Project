@@ -9,6 +9,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -18,7 +20,6 @@ import static com.example.ds_project.XMLGraph.*;
 
 public class GraphEditorHandlers {
 
-    // static XMLGraph xmlGraph = new XMLGraph();
     static class MostInfluencerHandler extends GraphEditor implements EventHandler{
         Label label=new Label();
 
@@ -37,14 +38,14 @@ public class GraphEditorHandlers {
                 alert.setHeaderText("You should select xml file");
                 alert.showAndWait();
             }
-
+             label.setFont((Font.font("Arial" , FontWeight.BOLD , FontPosture.ITALIC,18)));
             Stage stage = new Stage();
             stage.setTitle("Most Influencer");
 
             VBox vbox = new VBox(label);
             vbox.setSpacing(20);
             vbox.setAlignment(Pos.CENTER);
-            Scene scene = new Scene(vbox, 400, 400);
+            Scene scene = new Scene(vbox, 400, 200);
             stage.setScene(scene);
             if (XMLTree.getRoot() != null) stage.show();
         }
@@ -66,11 +67,12 @@ public class GraphEditorHandlers {
 
             Stage stage = new Stage();
             stage.setTitle("Active User");
-            Label label = new Label("The Most active user has ID "+activ+"and follows "+activfollow+ " user(s)");
+            Label label = new Label("The Most active user has ID "+activ+" and follows "+activfollow+ " user(s)");
+            label.setFont((Font.font("Arial" , FontWeight.BOLD , FontPosture.ITALIC,18)));
             VBox vbox = new VBox(label);
             vbox.setSpacing(20);
             vbox.setAlignment(Pos.CENTER);
-            Scene scene = new Scene(vbox, 400, 400);
+            Scene scene = new Scene(vbox, 480, 200);
             stage.setScene(scene);
             if (XMLTree.getRoot() != null) stage.show();
         }
@@ -84,8 +86,8 @@ public class GraphEditorHandlers {
         public void handle(Event event) {
             UserID1 = usertext1.getText();
             UserID2 = usertext2.getText();
+            if (XMLTree.getRoot() != null && UserID1!="" && UserID1!=""){
             try {
-
             XMLGraph.constructGraph(xmlTree.getRoot());
             XMLGraph.MergeSortAll();
             mutualfriend(Integer.parseInt(UserID1),Integer.parseInt(UserID2)); }
@@ -97,15 +99,28 @@ public class GraphEditorHandlers {
             }
             Stage stage = new Stage();
             stage.setTitle("Mutual Followers");
-
-            label = new Label("Mutual Followers ID(s):"+mutualFriends.toString());
+          if(mutualFriends.size()==0) {
+              label =new Label("Has no mutual friend");
+          }
+            else label = new Label("Mutual Followers ID(s): "+mutualFriends.toString());
+            label.setFont((Font.font("Arial" , FontWeight.BOLD , FontPosture.ITALIC,18)));
             VBox vbox = new VBox(label);
             vbox.setSpacing(20);
             vbox.setAlignment(Pos.CENTER);
             Scene scene = new Scene(vbox, 400, 400);
             stage.setScene(scene);
-            if (XMLTree.getRoot() != null) stage.show();
+            if (XMLTree.getRoot() != null && UserID1!="" && UserID1!="")
+                stage.show();
+
         }
+
+            else {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Error");
+                alert.setHeaderText("You should select two users");
+                alert.showAndWait();
+            }
+    }
     }
     static class SuggestFollowersHandler extends GraphEditor implements EventHandler{
         Label label=new Label();
@@ -125,6 +140,8 @@ public class GraphEditorHandlers {
             }
             label = new Label(sug);
             Stage stage = new Stage();
+            label.setFont((Font.font("Arial" , FontWeight.BOLD , FontPosture.ITALIC,13)));
+
             stage.setTitle("Suggestions");
             VBox vbox = new VBox(label);
             vbox.setSpacing(20);
