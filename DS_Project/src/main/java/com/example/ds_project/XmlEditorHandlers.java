@@ -283,9 +283,13 @@ public class XmlEditorHandlers {
 
                     } else if (xmlTree.getErrorLines().size() == 0) {
                         error += "No Errors Found";
-                    } else for (int i = 0; i < xmlTree.getErrorLines().size(); i++) {
+                    } else{
+                        error += "  Number of Errors is "+xmlTree.getErrorLines().size() +"\n";
+                       for (int i = 0; i < xmlTree.getErrorLines().size(); i++) {
                         error += xmlTree.getErrorMessages().get(i) + " in line " + xmlTree.getErrorLines().get(i) + "\n";
                     }
+                }
+
                     Label label = new Label(error);
                     VBox vbox = new VBox(label);
                     vbox.setSpacing(20);
