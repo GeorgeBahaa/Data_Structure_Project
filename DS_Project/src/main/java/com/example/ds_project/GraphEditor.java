@@ -27,6 +27,7 @@ public class GraphEditor extends GUIEditor implements EventHandler {
     private Label graphLabel;
     private Label selectLabel;
     private Label graphTypeLabel;
+
     TextArea graphTextArea = new TextArea();
     private FlowPane flowPane;
     private FlowPane SaveGraphflowPane;

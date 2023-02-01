@@ -91,19 +91,19 @@ public class XMLGraph {
         }
         activ = index;
         activfollow = max;
-        System.out.println("The Most active user has ID "+index+" follow "+max+ " user");
+        //System.out.println("The Most active user has ID "+index+" follow "+max+ " user");
     }
 
 
     public static void getInfluencer(){
-        System.out.println("the Infuencer has ID "+pq.peek().getValue()+" and has "+ pq.peek().getKey()+" followers");
+        //System.out.println("the Infuencer has ID "+pq.peek().getValue()+" and has "+ pq.peek().getKey()+" followers");
     }
     public static void suggestFollowers(){
 
         ArrayList<Integer> followrsOfFollowers = new ArrayList<>();
         ArrayList<Integer> suggestions = new ArrayList<>();
 
-        for(int k=0 ; k< xmlGraphNodes.size() ; k++) {
+        for(int k=1 ; k< xmlGraphNodes.size() ; k++) {
 
             sug+="Suggestions for User ID "+k+'\n';
             int id=k;
@@ -112,7 +112,6 @@ public class XMLGraph {
                 followrsOfFollowers.addAll(xmlGraphNodes.get(xmlGraphNodes.get(id).get(i)));
             }
             inputArray=followrsOfFollowers;
-
             sortGivenArray();
 
             for (int i=1 ; i< followrsOfFollowers.size() ; i++){
@@ -128,11 +127,16 @@ public class XMLGraph {
                 }
 
             }
-            sug+=" -Users ID(s) "+ suggestions+"\n\n";
+            if(suggestions.isEmpty()){
+                sug+=" -No users to follow\n\n";
+            }
+            else {
+                sug+=" -Users ID(s) "+ suggestions+"\n\n";
+            }
             suggestions.clear();
         }
 
-        System.out.println(sug);
+        //System.out.println(sug);
     }
 
     public static void mutualfriend(int ID1,int ID2){
@@ -140,7 +144,7 @@ public class XMLGraph {
             if (binarySearch(xmlGraphNodes.get(ID2),xmlGraphNodes.get(ID1).get(i))==1)
                 mutualFriends.add(xmlGraphNodes.get(ID1).get(i));
         }
-        System.out.println(mutualFriends);
+        //System.out.println(mutualFriends);
     }
 
     private static int binarySearch(ArrayList<Integer> arr, int x)

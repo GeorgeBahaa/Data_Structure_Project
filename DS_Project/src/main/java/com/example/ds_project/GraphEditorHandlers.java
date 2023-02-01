@@ -29,7 +29,7 @@ public class GraphEditorHandlers {
             XMLGraph.constructGraph(xmlTree.getRoot());
             XMLGraph.MergeSortAll();
             XMLGraph.getInfluencer();
-                label.setText("The Infuencer has ID "+pq.peek().getValue()+" and has "+ pq.peek().getKey()+" followers" );
+                label.setText("The Most infuencer user has ID "+pq.peek().getValue()+" and has "+ pq.peek().getKey()+" followers" );
 
         }
             catch (Exception exception) {
@@ -45,7 +45,7 @@ public class GraphEditorHandlers {
             VBox vbox = new VBox(label);
             vbox.setSpacing(20);
             vbox.setAlignment(Pos.CENTER);
-            Scene scene = new Scene(vbox, 400, 200);
+            Scene scene = new Scene(vbox, 500, 250);
             stage.setScene(scene);
             if (XMLTree.getRoot() != null) stage.show();
         }
@@ -87,37 +87,52 @@ public class GraphEditorHandlers {
             UserID1 = usertext1.getText();
             UserID2 = usertext2.getText();
             if (XMLTree.getRoot() != null && UserID1!="" && UserID1!=""){
-            try {
-            XMLGraph.constructGraph(xmlTree.getRoot());
-            XMLGraph.MergeSortAll();
-            mutualfriend(Integer.parseInt(UserID1),Integer.parseInt(UserID2)); }
-            catch (Exception exception) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Error");
-                alert.setHeaderText("You should select xml file");
-                alert.showAndWait();
+                XMLGraph.constructGraph(xmlTree.getRoot());
+                XMLGraph.MergeSortAll();
+                try {
+                    Integer.parseInt(UserID1);
+                    Integer.parseInt(UserID2);
+                    mutualfriend(Integer.parseInt(UserID1),Integer.parseInt(UserID2));
+                    Stage stage = new Stage();
+                    stage.setTitle("Mutual Followers");
+                    if (mutualFriends.size() == 0) {
+                        label = new Label("Has no mutual friend");
+                    } else label = new Label("Mutual Followers ID(s): " + mutualFriends.toString());
+                    label.setFont((Font.font("Arial", FontWeight.BOLD, FontPosture.ITALIC, 18)));
+                    VBox vbox = new VBox(label);
+                    vbox.setSpacing(20);
+                    vbox.setAlignment(Pos.CENTER);
+                    Scene scene = new Scene(vbox, 400, 400);
+                    stage.setScene(scene);
+                    if (XMLTree.getRoot() != null && UserID1 != "" && UserID1 != "")
+                        stage.show();
+                    mutualFriends.clear();
+                }
+                catch (NumberFormatException e) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Please enter a valid User ID");
+                    alert.showAndWait();
+                }
+                catch (Exception exception){
+                    if(Integer.parseInt(UserID1) > xmlGraphNodes.size() || Integer.parseInt(UserID2) > xmlGraphNodes.size() ){
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("User not found");
+                        alert.setHeaderText("We have only "+  (xmlGraphNodes.size()-1) +" user(s)");
+                        alert.showAndWait();
+                    }
+                }
             }
-            Stage stage = new Stage();
-            stage.setTitle("Mutual Followers");
-          if(mutualFriends.size()==0) {
-              label =new Label("Has no mutual friend");
-          }
-            else label = new Label("Mutual Followers ID(s): "+mutualFriends.toString());
-            label.setFont((Font.font("Arial" , FontWeight.BOLD , FontPosture.ITALIC,18)));
-            VBox vbox = new VBox(label);
-            vbox.setSpacing(20);
-            vbox.setAlignment(Pos.CENTER);
-            Scene scene = new Scene(vbox, 400, 400);
-            stage.setScene(scene);
-            if (XMLTree.getRoot() != null && UserID1!="" && UserID1!="")
-                stage.show();
-
-        }
-
             else {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Error");
-                alert.setHeaderText("You should select two users");
+                if(XMLTree.getRoot() != null) {
+                    alert.setTitle("Error");
+                    alert.setHeaderText("You should select two users");
+                }
+                else{
+                    alert.setTitle("Error");
+                    alert.setHeaderText("You should select xml file");
+                }
                 alert.showAndWait();
             }
     }
@@ -129,7 +144,8 @@ public class GraphEditorHandlers {
             try{
             XMLGraph.constructGraph(xmlTree.getRoot());
             XMLGraph.MergeSortAll();
-            XMLGraph.suggestFollowers();
+            getMostActive();
+            suggestFollowers();
                  }
 
             catch (Exception exception) {

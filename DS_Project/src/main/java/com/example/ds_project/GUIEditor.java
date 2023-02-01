@@ -21,6 +21,8 @@ import java.io.*;
 
 public class GUIEditor extends Application {
     private Button saveXml;
+    private Button XmlEditor;
+    private Button GraphEditor;
     XMLTree xmlTree = new XMLTree();
     static String path;
     File file1;
@@ -29,11 +31,12 @@ public class GUIEditor extends Application {
     private Label xmlTypeLabel;
     private Button selectButton;
     TextArea xmlTextArea = new TextArea();
-    CheckBox c1;
+    //CheckBox c1;
     private Label guilabel;
-    CheckBox c2;
+    //CheckBox c2;
     private FlowPane flowPane;
     private HBox hbox;
+    private HBox hbox2;
     private VBox vBox;
     private FlowPane SaveXMLflowPane;
 
@@ -54,8 +57,14 @@ public class GUIEditor extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         saveXml = new Button("saveXml");
+        XmlEditor = new Button("XML Editor");
+        GraphEditor = new Button("Graph Editor");
         saveXml.setPrefHeight(30);
         saveXml.setPrefWidth(90);
+        XmlEditor.setPrefHeight(40);
+        XmlEditor.setPrefWidth(120);
+        GraphEditor.setPrefHeight(40);
+        GraphEditor.setPrefWidth(120);
         xmlTypeLabel= new Label(" Type XML Text");
         xmlTypeLabel.setFont(Font.font("Arial" , FontWeight.NORMAL , FontPosture.ITALIC, 20));
         xmlTextArea= new TextArea();
@@ -65,38 +74,47 @@ public class GUIEditor extends Application {
         guilabel = new Label("GUI Editor");
         guilabel.setTextFill(Color.DARKBLUE);
         guilabel.setFont(Font.font("Arial" , FontWeight.BOLD , FontPosture.ITALIC, 28));
+        XmlEditor.setTextFill(Color.DARKBLUE);
+        XmlEditor.setFont(Font.font("Arial" , FontWeight.BOLD , FontPosture.ITALIC, 15));
+        GraphEditor.setTextFill(Color.DARKBLUE);
+        GraphEditor.setFont(Font.font("Arial" , FontWeight.BOLD , FontPosture.ITALIC, 15));
         flowPane = new FlowPane(guilabel);
         flowPane.setAlignment(Pos.CENTER);
         SaveXMLflowPane = new FlowPane( saveXml);
         SaveXMLflowPane.setAlignment(Pos.CENTER);
-        c1 = new CheckBox("XML Editor");
-        c2 = new CheckBox("Graph Editor");
-        c1.setStyle("-fx-border-color: lightblue; "
-                + "-fx-padding: 0.166667em 0.166667em 0.25em 0.25em;"
-                + "-fx-font-size: 20;"
-                + "-fx-border-insets: -5; "
-                + "-fx-border-radius: 5;"
-                + "-fx-border-style: dotted;"
-                + "-fx-border-width: 2;");
-        c2.setStyle("-fx-border-color: lightblue; "
-                + "-fx-padding: 0.166667em 0.166667em 0.25em 0.25em;"
-                + "-fx-font-size: 20;"
-                + "-fx-border-insets: -5; "
-                + "-fx-border-radius: 5;"
-                + "-fx-border-style: dotted;"
-                + "-fx-border-width: 2;");
+//        c1 = new CheckBox("XML Editor");
+//        c2 = new CheckBox("Graph Editor");
+//        c1.setStyle("-fx-border-color: lightblue; "
+//                + "-fx-padding: 0.166667em 0.166667em 0.25em 0.25em;"
+//                + "-fx-font-size: 20;"
+//                + "-fx-border-insets: -5; "
+//                + "-fx-border-radius: 5;"
+//                + "-fx-border-style: dotted;"
+//                + "-fx-border-width: 2;");
+//        c2.setStyle("-fx-border-color: lightblue; "
+//                + "-fx-padding: 0.166667em 0.166667em 0.25em 0.25em;"
+//                + "-fx-font-size: 20;"
+//                + "-fx-border-insets: -5; "
+//                + "-fx-border-radius: 5;"
+//                + "-fx-border-style: dotted;"
+//                + "-fx-border-width: 2;");
 
         selectButton = new Button("Browse");
         selectButton.setPrefHeight(20);
         selectButton.setPrefWidth(90);
         hbox = new HBox(selectLabel,selectButton);
         hbox.setSpacing(15);
-        vBox = new VBox(flowPane,hbox,xmlTypeLabel,xmlTextArea,SaveXMLflowPane,c1,c2);
+        hbox2 = new HBox(XmlEditor,GraphEditor);
+        hbox2.setSpacing(15);
+        hbox2.setAlignment(Pos.CENTER);
+        vBox = new VBox(flowPane,hbox,xmlTypeLabel,xmlTextArea,SaveXMLflowPane,hbox2);
         vBox.setSpacing(20);
         vBox.setStyle("-fx-padding: 16;");
-      //  selectButton.setOnAction(new XmlEditor(new ButtonHandlers.selectFileHandler()));
-        c1.setOnAction(new XMLEditor());
-        c2.setOnAction(new GraphEditor());
+//        selectButton.setOnAction(new XmlEditor(new ButtonHandlers.selectFileHandler()));
+//        c1.setOnAction(new XMLEditor());
+//        c2.setOnAction(new GraphEditor());
+        XmlEditor.setOnAction(new XMLEditor());
+        GraphEditor.setOnAction(new GraphEditor());
         selectButton.setOnAction(new selectFileHandler());
         saveXml.setOnAction(action -> {
             xmlText = xmlTextArea.getText();
@@ -114,6 +132,7 @@ public class GUIEditor extends Application {
         });
         Scene scene = new Scene(vBox,550, 400);
         stage.setScene(scene);
+        stage.setTitle("GUI Editor");
         stage.show();
     }
 
@@ -124,10 +143,15 @@ public class GUIEditor extends Application {
         public void handle(Event event) {
 
             Stage stage = new Stage();
-            stage.setTitle("FileChooser");
+            stage.setTitle("File Chooser");
             FileChooser filechooser = new FileChooser();
-            Label label = new Label("no files selected");
+            Label label = new Label("No files selected");
             Button button = new Button("Select file");
+            Button button1 = new Button("OK");
+            button.setPrefWidth(80);
+            button.setPrefHeight(25);
+            button1.setPrefWidth(80);
+            button1.setPrefHeight(25);
             EventHandler<ActionEvent> event1 =
                     new EventHandler<ActionEvent>() {
                         public void handle(ActionEvent e) {
@@ -184,11 +208,13 @@ public class GUIEditor extends Application {
 
                         }
                     };
+
             button.setOnAction(event1);
-            VBox vbox = new VBox(label, button);
+            button1.setOnAction(e -> stage.close());
+            VBox vbox = new VBox(label, button, button1);
             vbox.setSpacing(20);
             vbox.setAlignment(Pos.CENTER);
-            Scene scene = new Scene(vbox, 200, 150);
+            Scene scene = new Scene(vbox, 300, 200);
             stage.setScene(scene);
             stage.show();
         }
