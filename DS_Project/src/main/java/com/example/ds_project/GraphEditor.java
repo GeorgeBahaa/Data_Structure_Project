@@ -63,7 +63,7 @@ public class GraphEditor extends GUIEditor implements EventHandler {
         mostInfluencerButton = new Button("Most Influencer User");
         activeUserButton = new Button("Active User");
         mutualUsersButton = new Button("Mutual Followers");
-        suggestFollowersButton = new Button("Suggest Followers");
+        suggestFollowersButton = new Button("Suggest to Follow");
         searchButton = new Button("Search");
         mostInfluencerButton.setPrefHeight(30);
         mostInfluencerButton.setPrefWidth(130);
@@ -88,7 +88,7 @@ public class GraphEditor extends GUIEditor implements EventHandler {
         activeuserlabel.setFont(Font.font("Cambria" , FontWeight.SEMI_BOLD, FontPosture.REGULAR,15));
         Label mutuallabel = new Label("Find mutual followers");
         mutuallabel.setFont(Font.font("Cambria" , FontWeight.SEMI_BOLD, FontPosture.REGULAR,15));
-        Label suggestlabel = new Label("Suggest Followers");
+        Label suggestlabel = new Label("Suggest to Follow");
         suggestlabel.setFont(Font.font("Cambria" , FontWeight.SEMI_BOLD, FontPosture.REGULAR,15));
 
         HBox spin = new HBox(new Label("User1"),usertext1,new Label("User2"),usertext2);
