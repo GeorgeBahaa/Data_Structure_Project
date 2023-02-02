@@ -17,6 +17,15 @@ XML Editor Window appears when XML editor button is selected.
 Choose function you want to operate on XML file: Validate, convert Json, Compress, 
 Decompress, Prettify.
 
+-validate
+to check if xml is valid or has an errors and correct these errors.
+-prettify
+to print prettified xml file and saved it on a file xml.
+-convert json
+to convert xml to json objects and save as josn file.
+-compress, minify and decompress
+to compress xml file to deacrease its size and saved as zip file then decompress this file   
+
 ![WhatsApp Image 2023-02-02 at 00 51 01](https://user-images.githubusercontent.com/105325517/216461172-bea5ef6c-116e-4426-8037-6a5bf60adcff.jpg)
 
 representing the users data using the graph data structure: the XML file will represent the
@@ -25,3 +34,16 @@ The user data is his id (unique across the network), name, list of his posts and
 
 Graph Editor Button Clicked: Graph Editor Window appears with XML Graph Functions.
 ![WhatsApp Image 2023-02-02 at 01 03 50](https://user-images.githubusercontent.com/105325517/216461388-a25a953a-a86d-4253-9944-f17fc819ac3f.jpg)
+
+-search
+ to search by a word or a topic in all posts then return the post has related to with its user 
+ -most influencer 
+ to return the id of user has the most following users 
+ -most active 
+ to return the id of user that has more connections
+ -mututal friends
+ return the mutual friends between two users 
+ -suggest
+ to suggest users for all users to follow from the followers of thier followers 
+ 
+ 
